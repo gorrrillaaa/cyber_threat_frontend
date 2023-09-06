@@ -1,0 +1,38 @@
+@mixin vietnam-regular {
+    font-family: "Be-Vietnam-Pro-Regular", sans-serif;
+}
+
+@mixin vietnam-medium {
+    font-family: "Be-Vietnam-Pro-Medium", sans-serif;
+}
+
+@mixin vietnam-semi-bold {
+    font-family: "Be-Vietnam-Pro-Semi-Bold", sans-serif;
+}
+
+@mixin vietnam-bold {
+    font-family: "Be-Vietnam-Pro-Bold", sans-serif;
+}
+
+@mixin modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999;
+    transition: $transition;
+}
+
+@mixin container {
+    width: 1170px;
+    margin: 0 auto;
+
+    @media screen and (min-width: 1920px) {
+        width: 1840px;
+    }
+
+    @media screen and (max-width: 1440px) {
+        width: 1170px;
+    }
+}

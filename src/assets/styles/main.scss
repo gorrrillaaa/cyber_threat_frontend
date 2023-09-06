@@ -1,0 +1,57 @@
+@import "./fonts.scss";
+@import "./variables.scss";
+@import "./mixins.scss";
+
+* {
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+html {
+    overflow-x: hidden;
+    background: $bg-main;
+}
+
+body {
+    @include vietnam-regular;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @include vietnam-bold;
+    padding: 0;
+    margin: 0;
+    color: $txt-main;
+}
+
+h1 {
+    font-size: 64px;
+}
+
+h3 {
+    font-size: 26px;
+}
+
+h4 {
+    font-size: 24px;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    display: block;
+}
