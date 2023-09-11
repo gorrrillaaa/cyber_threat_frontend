@@ -14,6 +14,42 @@
     font-family: "Be-Vietnam-Pro-Bold", sans-serif;
 }
 
+@mixin scrollbar {
+    scrollbar-color: #2769ff #303240;
+    scrollbar-width: thin;
+
+    &::-moz-scrollbar {
+        width: 7px;
+        height: 7px;
+        border-radius: 10px;
+    }
+
+    &::-moz-scrollbar-thumb {
+        background-color: #2769ff;
+        width: 7px;
+        height: 7px;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+        background-color: #303240;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #2769ff;
+        width: 7px;
+        height: 7px;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: #303240;
+    }
+}
+
 @mixin modal {
     position: fixed;
     top: 0;
@@ -32,7 +68,12 @@
         width: 1840px;
     }
 
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1920px) {
         width: 1170px;
+    }
+
+    @media screen and (max-width: 1440px) {
+        width: 100%;
+        padding: 0 16px;
     }
 }

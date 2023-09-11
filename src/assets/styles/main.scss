@@ -31,18 +31,6 @@ h6 {
     color: $txt-main;
 }
 
-h1 {
-    font-size: 64px;
-}
-
-h3 {
-    font-size: 26px;
-}
-
-h4 {
-    font-size: 24px;
-}
-
 p {
     margin: 0;
     padding: 0;
@@ -54,4 +42,25 @@ a {
 
 img {
     display: block;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    outline: none;
+    background: none;
+    padding: 0;
+}
+
+.modal-enter-active {
+    transition: $transition;
+}
+
+.modal-leave-active {
+    transition: $transition;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
 }

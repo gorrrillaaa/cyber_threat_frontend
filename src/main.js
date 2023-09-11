@@ -6,4 +6,6 @@ import store from "./store";
 
 import "@/assets/styles/main.scss";
 
-createApp(App).use(store).use(router).mount("#app");
+import ClickOutside from "click-outside-vue3";
+
+createApp(App).use(store).use(router).use(ClickOutside).mount("#app");

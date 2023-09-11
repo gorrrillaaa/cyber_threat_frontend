@@ -1,5 +1,21 @@
 $bg-main: #202024;
+$bg-black: #26272f;
+$bg-gray: #31333d;
+$bg-gray-500: rgba(152, 183, 255, 0.05);
 
 $txt-main: #ffffff;
+$txt-gray: #3f465d;
+$txt-primary: #447dff;
+
+$border-gray: #373c4e;
+$border-gray-150: rgba(152, 183, 255, 0.15);
+
+$primary: #2464f6;
+$primary-500: rgba(36, 100, 246, 0.5);
 
 $transition: all 0.3s;
+
+$box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.1),
+    0px 7px 16px 0px rgba(0, 0, 0, 0.1), 0px 29px 29px 0px rgba(0, 0, 0, 0.09),
+    0px 66px 40px 0px rgba(0, 0, 0, 0.05),
+    0px 117px 47px 0px rgba(0, 0, 0, 0.01), 0px 184px 51px 0px rgba(0, 0, 0, 0);
