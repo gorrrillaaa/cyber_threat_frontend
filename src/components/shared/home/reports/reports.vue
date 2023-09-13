@@ -4,22 +4,29 @@
 
         <div class="home-reports__cards" v-if="reports.length">
             <HomeReportsReport
-                v-for="report in reports"
-                :key="report"
+                v-for="(report, reportIndex) in reports"
+                :key="reportIndex"
                 :report="report"
             />
         </div>
 
-        <!-- <UIButton class="home-reports__more" label="More" @clicked="more" /> -->
+        <UIButton
+            class="home-reports__more"
+            v-if="isMore"
+            label="More"
+            @clicked="more"
+        />
     </div>
 </template>
 
 <script>
-import {computed} from "vue";
+import {computed, toRef, watchEffect} from "vue";
 import {useStore} from "vuex";
 
 import HomeReportsReport from "@/components/shared/home/reports/report.vue";
 import UIButton from "@/components/ui/button/button.vue";
+
+const PAGE_SIZE = 25;
 
 export default {
     name: "HomeReports",
@@ -30,20 +37,40 @@ export default {
     setup() {
         const store = useStore();
 
+        const page = toRef(0);
+
         const group = computed(() => {
             return store.getters["getGroup"];
         });
 
         const reports = computed(() => {
-            return group.value ? group.value.reports : [];
+            const firstIndex = 0;
+            const lastIndex = (page.value + 1) * PAGE_SIZE;
+
+            return group.value
+                ? group.value.reports.slice(firstIndex, lastIndex)
+                : [];
+        });
+
+        const isMore = computed(() => {
+            return group.value
+                ? reports.value.length < group.value.reports.length
+                : false;
+        });
+
+        watchEffect(() => {
+            if (reports.value.length < PAGE_SIZE) {
+                page.value = 0;
+            }
         });
 
         const more = () => {
-            console.log("More");
+            page.value += 1;
         };
 
         return {
             reports,
+            isMore,
             more,
         };
     },

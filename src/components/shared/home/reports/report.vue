@@ -1,15 +1,27 @@
 <template>
     <div class="home-reports-report">
-        <a class="home-reports-report__preview" href="" target="_blank">
+        <a
+            class="home-reports-report__preview"
+            :href="report.url"
+            target="_blank"
+        >
             <img :src="preview" alt="preview" />
         </a>
 
         <div class="home-reports-report__info">
-            <a class="home-reports-report__info-title" href="" target="_blank">
+            <a
+                class="home-reports-report__info-title"
+                :href="report.url"
+                target="_blank"
+            >
                 {{ report.title }}
             </a>
 
-            <a class="home-reports-report__info-link" href="" target="_blank">
+            <a
+                class="home-reports-report__info-link"
+                :href="report.url"
+                target="_blank"
+            >
                 View the report
 
                 <UIIcon icon="arrow-right-18" />
@@ -45,8 +57,8 @@ export default {
             const icon = report.value.icon;
 
             return icon
-                ? require("@/assets/images/shared/home/reports/default.svg")
-                : icon;
+                ? icon
+                : require("@/assets/images/shared/home/reports/default.svg");
         });
 
         return {
