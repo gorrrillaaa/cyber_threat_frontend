@@ -42,14 +42,23 @@ export default {
             return store.getters["getGroup"];
         });
 
+        const country = computed(() => {
+            return store.state.country;
+        });
+
         const list = computed(() => {
             return store.getters["getGroups"].map((element) => {
                 const difference = DEFAULT_PERCENT - element.bar;
 
+                const findCountry = element.map.find(
+                    (item) => item === country.value
+                );
+
                 return {
                     ...element,
                     class:
-                        group.value && group.value.key === element.key
+                        (group.value && group.value.key === element.key) ||
+                        findCountry
                             ? "home-map-threats__item-threat--active"
                             : "",
                     style: {
@@ -141,6 +150,15 @@ export default {
     }
 }
 
+@media screen and (max-width: 1200px) {
+    .home-map-threats {
+        &__list {
+            max-height: 100%;
+            padding-right: 0;
+        }
+    }
+}
+
 @media screen and (max-width: 576px) {
     .home-map-threats {
         padding: 28px 22px;
@@ -148,11 +166,6 @@ export default {
 
         &__title {
             font-size: 18px;
-        }
-
-        &__list {
-            max-height: 100%;
-            padding-right: 0;
         }
 
         &__item {
