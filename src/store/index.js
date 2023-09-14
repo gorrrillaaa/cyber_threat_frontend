@@ -786,6 +786,7 @@ export default createStore({
         group: null,
         isModal: false,
         country: null,
+        page: 0,
     },
     getters: {
         getYear(state) {
@@ -809,6 +810,7 @@ export default createStore({
 
         setGroup(state, group) {
             state.group = group;
+            state.page = 0;
         },
 
         setIsModal(state, isModal) {
@@ -818,6 +820,9 @@ export default createStore({
         setCountry(state, country) {
             state.country = country;
         },
+
+        setPage(state, page) {
+            state.page = page;
+        },
     },
-    actions: {},
 });

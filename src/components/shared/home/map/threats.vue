@@ -47,25 +47,27 @@ export default {
         });
 
         const list = computed(() => {
-            return store.getters["getGroups"].map((element) => {
-                const difference = DEFAULT_PERCENT - element.bar;
+            return store.getters["getGroups"]
+                .map((element) => {
+                    const difference = DEFAULT_PERCENT - element.bar;
 
-                const findCountry = element.map.find(
-                    (item) => item === country.value
-                );
+                    const findCountry = element.map.find(
+                        (item) => item === country.value
+                    );
 
-                return {
-                    ...element,
-                    class:
-                        (group.value && group.value.key === element.key) ||
-                        findCountry
-                            ? "home-map-threats__item-threat--active"
-                            : "",
-                    style: {
-                        width: `calc(${DEFAULT_PERCENT}% - ${COLUMN_GAP}px - ${LABEL_WIDTH}px - ${difference}px)`,
-                    },
-                };
-            });
+                    return {
+                        ...element,
+                        class:
+                            (group.value && group.value.key === element.key) ||
+                            findCountry
+                                ? "home-map-threats__item-threat--active"
+                                : "",
+                        style: {
+                            width: `calc(${DEFAULT_PERCENT}% - ${COLUMN_GAP}px - ${LABEL_WIDTH}px - ${difference}px)`,
+                        },
+                    };
+                })
+                .sort((a, b) => b.bar - a.bar);
         });
 
         const handleItem = (item) => {

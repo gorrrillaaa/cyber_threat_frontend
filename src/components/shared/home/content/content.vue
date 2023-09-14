@@ -60,6 +60,10 @@ export default {
 
 <style lang="scss">
 .home-content {
+    background-image: url("@/assets/images/shared/home/header/ellipse.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+
     &__container {
         @include container;
     }

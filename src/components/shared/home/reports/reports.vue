@@ -20,13 +20,23 @@
 </template>
 
 <script>
-import {computed, toRef, watchEffect} from "vue";
+import {computed, ref, onMounted, onBeforeUnmount} from "vue";
 import {useStore} from "vuex";
 
 import HomeReportsReport from "@/components/shared/home/reports/report.vue";
 import UIButton from "@/components/ui/button/button.vue";
 
-const PAGE_SIZE = 25;
+const SCREENS = {
+    main: 1920,
+    medium: 1440,
+    small: 768,
+};
+
+const PAGE_SIZES = {
+    main: 12,
+    medium: 9,
+    small: 4,
+};
 
 export default {
     name: "HomeReports",
@@ -37,15 +47,42 @@ export default {
     setup() {
         const store = useStore();
 
-        const page = toRef(0);
+        const innerWidth = ref(0);
+
+        onMounted(() => {
+            window.addEventListener("resize", resize);
+
+            resize();
+        });
+
+        onBeforeUnmount(() => {
+            window.removeEventListener("resize", resize);
+        });
+
+        const page = computed(() => {
+            return store.state.page;
+        });
 
         const group = computed(() => {
             return store.getters["getGroup"];
         });
 
+        const pageSize = computed(() => {
+            if (innerWidth.value > SCREENS.medium) {
+                return PAGE_SIZES.main;
+            } else if (
+                innerWidth.value > SCREENS.small &&
+                innerWidth.value <= SCREENS.medium
+            ) {
+                return PAGE_SIZES.medium;
+            }
+
+            return PAGE_SIZES.small;
+        });
+
         const reports = computed(() => {
             const firstIndex = 0;
-            const lastIndex = (page.value + 1) * PAGE_SIZE;
+            const lastIndex = (page.value + 1) * pageSize.value;
 
             return group.value
                 ? group.value.reports.slice(firstIndex, lastIndex)
@@ -58,14 +95,12 @@ export default {
                 : false;
         });
 
-        watchEffect(() => {
-            if (reports.value.length < PAGE_SIZE) {
-                page.value = 0;
-            }
-        });
-
         const more = () => {
-            page.value += 1;
+            store.commit("setPage", page.value + 1);
+        };
+
+        const resize = () => {
+            innerWidth.value = window.innerWidth;
         };
 
         return {
