@@ -782,9 +782,10 @@ export default createStore({
                 ],
             },
         },
-        year: null,
+        year: "2023H1",
         group: null,
         isModal: false,
+        country: null,
     },
     getters: {
         getYear(state) {
@@ -812,6 +813,10 @@ export default createStore({
 
         setIsModal(state, isModal) {
             state.isModal = isModal;
+        },
+
+        setCountry(state, country) {
+            state.country = country;
         },
     },
     actions: {},

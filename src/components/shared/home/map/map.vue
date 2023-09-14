@@ -55,7 +55,7 @@ export default {
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1200px) {
     .home-map {
         &__block {
             grid-template-columns: repeat(1, 1fr);
