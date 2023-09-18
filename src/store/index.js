@@ -787,6 +787,7 @@ export default createStore({
         isModal: false,
         country: null,
         page: 0,
+        map: [],
     },
     getters: {
         getYear(state) {
@@ -796,7 +797,9 @@ export default createStore({
         getGroups(state) {
             const year = state.year;
 
-            return year ? state.years[year].groups : [];
+            return year
+                ? state.years[year].groups.sort((a, b) => b.bar - a.bar)
+                : [];
         },
 
         getGroup(state) {
@@ -823,6 +826,10 @@ export default createStore({
 
         setPage(state, page) {
             state.page = page;
+        },
+
+        setMap(state, map) {
+            state.map = map;
         },
     },
 });

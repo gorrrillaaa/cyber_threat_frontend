@@ -10,6 +10,8 @@
             />
         </div>
 
+        <p class="home-reports__label" v-else>Выберете группу</p>
+
         <UIButton
             class="home-reports__more"
             v-if="isMore"
@@ -128,6 +130,12 @@ export default {
         grid-gap: 20px;
     }
 
+    &__label {
+        @include vietnam-regular;
+        color: $txt-gray-700;
+        font-size: 18px;
+    }
+
     &__more {
         margin: 35px auto 0 auto;
     }
@@ -144,6 +152,10 @@ export default {
         &__cards {
             grid-template-columns: repeat(3, 1fr);
             grid-gap: 30px;
+        }
+
+        &__label {
+            font-size: 16px;
         }
     }
 }
@@ -174,6 +186,10 @@ export default {
 
         &__cards {
             grid-row-gap: 16px;
+        }
+
+        &__label {
+            font-size: 14px;
         }
     }
 }

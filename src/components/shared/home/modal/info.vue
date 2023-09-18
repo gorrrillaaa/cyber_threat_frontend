@@ -40,9 +40,9 @@
                     Country of origin
                 </h5>
 
-                <div class="home-modal-info__content-icons">
+                <!-- <div class="home-modal-info__content-icons">
                     <UIIcon icon="flag-33" />
-                </div>
+                </div> -->
             </div>
 
             <div class="home-modal-info__content-info">
@@ -55,10 +55,10 @@
                         {{ country.displayname }}
                     </p>
 
-                    <UIIcon
+                    <!-- <UIIcon
                         class="home-modal-info__content-icon"
                         icon="flag-33"
-                    />
+                    /> -->
                 </div>
             </div>
         </div>
@@ -67,9 +67,9 @@
             <div class="home-modal-info__content-header">
                 <h5 class="home-modal-info__content-title">Motivation</h5>
 
-                <div class="home-modal-info__content-icons">
+                <!-- <div class="home-modal-info__content-icons">
                     <UIIcon icon="money-25" />
-                </div>
+                </div> -->
             </div>
 
             <div class="home-modal-info__content-info">
@@ -82,10 +82,10 @@
                         {{ motivation.displayname }}
                     </p>
 
-                    <UIIcon
+                    <!-- <UIIcon
                         class="home-modal-info__content-icon"
                         icon="money-25"
-                    />
+                    /> -->
                 </div>
             </div>
         </div>
@@ -94,11 +94,20 @@
             <h5 class="home-modal-info__content-title">Targets of attacks</h5>
 
             <div class="home-modal-info__content-info">
-                <div class="home-modal-info__content-textarea">
+                <div
+                    class="home-modal-info__content-textarea"
+                    :class="getTextareaViewClass"
+                    ref="textarea"
+                >
                     <p
                         class="home-modal-info__content-label"
                         v-html="group.targets"
                     ></p>
+
+                    <div
+                        class="home-modal-info__content-shadow"
+                        v-if="isShadow && hasTextareaScrollbar"
+                    ></div>
                 </div>
             </div>
         </div>
@@ -106,7 +115,7 @@
 </template>
 
 <script>
-import {computed} from "vue";
+import {computed, onMounted, onBeforeUnmount, ref} from "vue";
 import {useStore} from "vuex";
 
 import UIIcon from "@/components/ui/icon/icon.vue";
@@ -119,6 +128,24 @@ export default {
     setup() {
         const store = useStore();
 
+        const isShadow = ref(false);
+        const hasTextareaScrollbar = ref(false);
+
+        const textarea = ref(null);
+
+        onMounted(() => {
+            checkScrollPosition();
+
+            textarea.value.addEventListener("scroll", checkScrollPosition);
+
+            hasTextareaScrollbar.value =
+                textarea.value.scrollHeight > textarea.value.clientHeight;
+        });
+
+        onBeforeUnmount(() => {
+            textarea.value.removeEventListener("scroll", checkScrollPosition);
+        });
+
         const group = computed(() => {
             return store.getters["getGroup"];
         });
@@ -127,7 +154,28 @@ export default {
             return group.value.aliases.join(", ");
         });
 
+        const getTextareaViewClass = computed(() => {
+            return hasTextareaScrollbar.value
+                ? "home-modal-info__content-textarea--scroll"
+                : "";
+        });
+
+        const checkScrollPosition = () => {
+            if (textarea.value) {
+                const scrollableHeight =
+                    textarea.value.scrollHeight - textarea.value.clientHeight;
+
+                isShadow.value =
+                    textarea.value.scrollTop >= 0 &&
+                    textarea.value.scrollTop < scrollableHeight;
+            }
+        };
+
         return {
+            isShadow,
+            hasTextareaScrollbar,
+            getTextareaViewClass,
+            textarea,
             group,
             aliases,
         };
@@ -169,6 +217,7 @@ export default {
         flex-direction: column;
         grid-row-gap: 8px;
         width: 436px;
+        position: relative;
     }
 
     &__content-group {
@@ -200,10 +249,28 @@ export default {
         @include scrollbar;
         max-height: 200px;
         overflow-y: auto;
+
+        &--scroll {
+            padding-right: 25px;
+        }
     }
 
     &__content-icons {
         display: none;
+    }
+
+    &__content-shadow {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: linear-gradient(
+            0deg,
+            #26272f 24.6%,
+            rgba(38, 39, 47, 0) 237.3%
+        );
+        height: 50px;
     }
 }
 
@@ -236,6 +303,10 @@ export default {
 
         &__content-textarea {
             max-height: 100%;
+
+            &--scroll {
+                padding-right: 0;
+            }
         }
 
         &__content-icons {
@@ -248,6 +319,10 @@ export default {
 
         &__content-info {
             width: 100%;
+        }
+
+        &__content-shadow {
+            display: none;
         }
     }
 }

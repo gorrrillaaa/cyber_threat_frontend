@@ -70,6 +70,8 @@ export default {
 
 @media screen and (max-width: 1200px) {
     .home-modal {
+        overflow-y: auto;
+
         &__content {
             padding: 60px 16px 29px 16px;
             max-width: 100%;

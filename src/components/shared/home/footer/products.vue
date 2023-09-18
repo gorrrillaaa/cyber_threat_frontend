@@ -59,7 +59,7 @@ export default {
 
     &__item {
         @include vietnam-regular;
-        color: rgba(255, 255, 255, 0.7);
+        color: $txt-gray-700;
         font-size: 18px;
     }
 }

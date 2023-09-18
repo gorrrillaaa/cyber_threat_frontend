@@ -2,10 +2,15 @@
     <div class="home-map-threats">
         <h3 class="home-map-threats__title">TOP 20 Known threats</h3>
 
-        <div class="home-map-threats__list" v-if="list.length">
+        <div
+            class="home-map-threats__list"
+            v-if="groups.length"
+            ref="list"
+            :class="getListViewClass"
+        >
             <div
                 class="home-map-threats__item"
-                v-for="item in list"
+                v-for="item in groups"
                 :key="item.id"
             >
                 <button
@@ -13,30 +18,64 @@
                     :class="item.class"
                     :style="item.style"
                     @click="handleItem(item)"
+                    @mouseover="handleSetMap(item)"
+                    @mouseout="handleClearMap"
                 >
                     {{ item.displayname }}
+
+                    <div class="home-map-threats__item-icons">
+                        <UIIcon
+                            v-for="icon in item.map"
+                            :key="icon"
+                            :icon="icon"
+                        />
+                    </div>
                 </button>
 
                 <p class="home-map-threats__item-label">
                     {{ item.bar }}
                 </p>
             </div>
+
+            <div
+                class="home-map-threats__shadow"
+                v-if="isShadow && hasListScrollbar"
+            ></div>
         </div>
     </div>
 </template>
 
 <script>
-import {computed} from "vue";
+import {computed, ref, onMounted, onBeforeUnmount} from "vue";
 import {useStore} from "vuex";
 
+import UIIcon from "@/components/ui/icon/icon.vue";
+
 const DEFAULT_PERCENT = 100;
-const COLUMN_GAP = 14;
-const LABEL_WIDTH = 30;
+const DEFAULT_GAP = 30;
 
 export default {
     name: "HomeMapThreats",
+    components: {
+        UIIcon,
+    },
     setup() {
         const store = useStore();
+
+        const list = ref(null);
+
+        const isShadow = ref(false);
+        const hasListScrollbar = ref(false);
+
+        onMounted(() => {
+            checkScrollPosition();
+
+            list.value.addEventListener("scroll", checkScrollPosition);
+        });
+
+        onBeforeUnmount(() => {
+            list.value.removeEventListener("scroll", checkScrollPosition);
+        });
 
         const group = computed(() => {
             return store.getters["getGroup"];
@@ -46,29 +85,47 @@ export default {
             return store.state.country;
         });
 
-        const list = computed(() => {
-            return store.getters["getGroups"]
-                .map((element) => {
-                    const difference = DEFAULT_PERCENT - element.bar;
+        const groups = computed(() => {
+            return store.getters["getGroups"].map((element, elementIndex) => {
+                const findCountry = element.map.find(
+                    (item) => item === country.value
+                );
 
-                    const findCountry = element.map.find(
-                        (item) => item === country.value
-                    );
-
-                    return {
-                        ...element,
-                        class:
-                            (group.value && group.value.key === element.key) ||
-                            findCountry
-                                ? "home-map-threats__item-threat--active"
-                                : "",
-                        style: {
-                            width: `calc(${DEFAULT_PERCENT}% - ${COLUMN_GAP}px - ${LABEL_WIDTH}px - ${difference}px)`,
-                        },
-                    };
-                })
-                .sort((a, b) => b.bar - a.bar);
+                return {
+                    ...element,
+                    class:
+                        (group.value && group.value.key === element.key) ||
+                        findCountry
+                            ? "home-map-threats__item-threat--active"
+                            : "",
+                    style: {
+                        width: `calc(${DEFAULT_PERCENT}% - ${
+                            elementIndex * DEFAULT_GAP
+                        }px)`,
+                    },
+                };
+            });
         });
+
+        const getListViewClass = computed(() => {
+            return hasListScrollbar.value
+                ? "home-map-threats__list--scroll"
+                : "";
+        });
+
+        const checkScrollPosition = () => {
+            if (list.value) {
+                const scrollableHeight =
+                    list.value.scrollHeight - list.value.clientHeight;
+
+                hasListScrollbar.value =
+                    list.value.scrollHeight > list.value.clientHeight;
+
+                isShadow.value =
+                    list.value.scrollTop >= 0 &&
+                    list.value.scrollTop < scrollableHeight;
+            }
+        };
 
         const handleItem = (item) => {
             store.commit("setGroup", item);
@@ -76,9 +133,23 @@ export default {
             store.commit("setIsModal", true);
         };
 
+        const handleSetMap = ({map}) => {
+            store.commit("setMap", map);
+        };
+
+        const handleClearMap = () => {
+            store.commit("setMap", []);
+        };
+
         return {
             list,
+            hasListScrollbar,
+            isShadow,
+            groups,
+            getListViewClass,
             handleItem,
+            handleSetMap,
+            handleClearMap,
         };
     },
 };
@@ -89,10 +160,12 @@ export default {
     border-radius: 20px;
     border: 1px solid $border-gray;
     background: $bg-black;
-    padding: 36px 36px 24px 36px;
+    padding: 36px 36px 0 36px;
     display: flex;
     flex-direction: column;
     grid-row-gap: 32px;
+    position: relative;
+    overflow: hidden;
 
     &__title {
         font-size: 26px;
@@ -103,9 +176,12 @@ export default {
         display: flex;
         flex-direction: column;
         grid-row-gap: 18px;
-        max-height: 631px;
+        max-height: 350px;
         overflow-y: auto;
-        padding-right: 59px;
+
+        &--scroll {
+            padding-right: 30px;
+        }
     }
 
     &__item {
@@ -127,6 +203,9 @@ export default {
         padding: 10px 18px;
         text-align: left;
         transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
         &--active {
             background: linear-gradient(270deg, #004dfe 0%, #477fff 100%);
@@ -137,15 +216,37 @@ export default {
         }
     }
 
+    &__item-icons {
+        display: none;
+        align-items: center;
+        grid-column-gap: 4px;
+    }
+
     &__item-label {
         @include vietnam-bold;
         color: $txt-main;
         font-size: 16px;
     }
+
+    &__shadow {
+        height: 68px;
+        position: absolute;
+        bottom: 0;
+        left: 36px;
+        right: 36px;
+        z-index: 100;
+        background: linear-gradient(
+            0deg,
+            #26272f 24.6%,
+            rgba(38, 39, 47, 0) 237.3%
+        );
+    }
 }
 
 @media screen and (max-width: 1920px) {
     .home-map-threats {
+        padding: 36px 36px 24px 36px;
+
         &__title {
             font-size: 20px;
         }
@@ -156,7 +257,18 @@ export default {
     .home-map-threats {
         &__list {
             max-height: 100%;
-            padding-right: 0;
+
+            &--scroll {
+                padding-right: 0;
+            }
+        }
+
+        &__item-icons {
+            display: flex;
+        }
+
+        &__shadow {
+            display: none;
         }
     }
 }

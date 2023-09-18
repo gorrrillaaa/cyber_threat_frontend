@@ -7,21 +7,32 @@
 <script>
 import {onMounted, onBeforeUnmount} from "vue";
 
-const OVERFLOWS = {
-    hidden: "hidden",
-    auto: "auto",
-};
-
 export default {
     name: "UIModal",
-    setup(_, {emit}) {
+    setup() {
         onMounted(() => {
-            document.documentElement.style.overflowY = OVERFLOWS.hidden;
+            scrollLock(false);
         });
 
         onBeforeUnmount(() => {
-            document.documentElement.style.overflowY = OVERFLOWS.auto;
+            scrollLock(true);
         });
+
+        const scrollLock = (isShow) => {
+            const bodyElement = document.querySelector("body");
+
+            if (isShow) {
+                bodyElement.style.removeProperty("overflow");
+                bodyElement.style.removeProperty("position");
+                bodyElement.style.removeProperty("top");
+                bodyElement.style.removeProperty("width");
+            } else {
+                bodyElement.style.overflow = "hidden";
+                bodyElement.style.position = "fixed";
+                bodyElement.style.top = `-${window.pageYOffset}px`;
+                bodyElement.style.width = "100%";
+            }
+        };
 
         return {};
     },
