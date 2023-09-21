@@ -20,10 +20,6 @@
 import {computed, ref, onMounted, onBeforeUnmount} from "vue";
 import {useStore} from "vuex";
 
-const FILTERS_VALUES = {
-    "2023H1": "2023H1",
-};
-
 export default {
     name: "HomeMapFilters",
     setup() {
@@ -31,6 +27,10 @@ export default {
 
         const content = ref(null);
         const isShadow = ref(false);
+
+        const years = computed(() => {
+            return Object.keys(store.state.years);
+        });
 
         onMounted(() => {
             handleCheckScrollPosition();
@@ -50,17 +50,17 @@ export default {
         });
 
         const filters = computed(() => {
-            return [
-                {
-                    id: 0,
-                    label: "2023 H1",
-                    value: FILTERS_VALUES["2023H1"],
+            return years.value.map((element) => {
+                return {
+                    id: element,
+                    label: element,
+                    value: element,
                     class:
-                        year.value === FILTERS_VALUES["2023H1"]
+                        year.value === element
                             ? "home-map-filters__filter--active"
                             : "",
-                },
-            ];
+                };
+            });
         });
 
         const handleCheckScrollPosition = () => {

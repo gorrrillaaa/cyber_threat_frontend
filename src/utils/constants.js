@@ -1,3 +1,5 @@
+export const DEFAULT_YEAR = "2023H1";
+
 export const YEARS = {
     "2023H1": {
         groups: [

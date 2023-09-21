@@ -1,11 +1,23 @@
 import {createStore} from "vuex";
 
-import {YEARS} from "@/utils/constants";
+import {YEARS, DEFAULT_YEAR} from "@/utils/constants";
+
+function setYear() {
+    const year = localStorage.getItem("year");
+
+    const isYear = YEARS[year];
+
+    if (isYear) {
+        return year;
+    }
+
+    return DEFAULT_YEAR;
+}
 
 export default createStore({
     state: {
         years: YEARS,
-        year: "2023H1",
+        year: setYear(),
         group: null,
         isModal: false,
         country: null,
@@ -23,7 +35,9 @@ export default createStore({
     },
     mutations: {
         setYear(state, year) {
-            state.year = year;
+            localStorage.setItem("year", year);
+
+            window.location.reload();
         },
 
         setGroup(state, group) {
