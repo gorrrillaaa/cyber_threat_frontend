@@ -53,7 +53,7 @@ export default {
             return years.value.map((element) => {
                 return {
                     id: element,
-                    label: element,
+                    label: element.toString().replace(/H/g, " H"),
                     value: element,
                     class:
                         year.value === element
