@@ -10,7 +10,9 @@
             />
         </div>
 
-        <p class="home-reports__label" v-else>Выберете группу</p>
+        <p class="home-reports__label" v-else>
+            Select threat group above to view reports
+        </p>
 
         <UIButton
             class="home-reports__more"
@@ -66,7 +68,7 @@ export default {
         });
 
         const group = computed(() => {
-            return store.getters["getGroup"];
+            return store.state.group;
         });
 
         const pageSize = computed(() => {

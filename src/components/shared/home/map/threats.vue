@@ -12,11 +12,13 @@
                 class="home-map-threats__item"
                 v-for="item in groups"
                 :key="item.id"
+                :style="{
+                    width: item.width,
+                }"
             >
                 <button
                     class="home-map-threats__item-threat"
                     :class="item.class"
-                    :style="item.style"
                     @click="handleItem(item)"
                     @mouseover="handleSetMap(item)"
                     @mouseout="handleClearMap"
@@ -71,6 +73,8 @@ export default {
             checkScrollPosition();
 
             list.value.addEventListener("scroll", checkScrollPosition);
+
+            handleCheckScrollbar();
         });
 
         onBeforeUnmount(() => {
@@ -78,7 +82,7 @@ export default {
         });
 
         const group = computed(() => {
-            return store.getters["getGroup"];
+            return store.state.group;
         });
 
         const country = computed(() => {
@@ -98,11 +102,6 @@ export default {
                         findCountry
                             ? "home-map-threats__item-threat--active"
                             : "",
-                    style: {
-                        width: `calc(${DEFAULT_PERCENT}% - ${
-                            elementIndex * DEFAULT_GAP
-                        }px)`,
-                    },
                 };
             });
         });
@@ -114,12 +113,11 @@ export default {
         });
 
         const checkScrollPosition = () => {
+            handleCheckScrollbar();
+
             if (list.value) {
                 const scrollableHeight =
                     list.value.scrollHeight - list.value.clientHeight;
-
-                hasListScrollbar.value =
-                    list.value.scrollHeight > list.value.clientHeight;
 
                 isShadow.value =
                     list.value.scrollTop >= 0 &&
@@ -141,6 +139,17 @@ export default {
             store.commit("setMap", []);
         };
 
+        const handleItemStyle = (item, index) => {
+            return {
+                width: `calc(100% - ${item.bar}px)`,
+            };
+        };
+
+        const handleCheckScrollbar = () => {
+            hasListScrollbar.value =
+                list.value.scrollHeight > list.value.clientHeight;
+        };
+
         return {
             list,
             hasListScrollbar,
@@ -150,6 +159,7 @@ export default {
             handleItem,
             handleSetMap,
             handleClearMap,
+            handleItemStyle,
         };
     },
 };
@@ -188,6 +198,7 @@ export default {
         display: flex;
         align-items: center;
         grid-column-gap: 14px;
+        width: 100%;
     }
 
     &__item-threat {
@@ -206,6 +217,9 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap;
+        grid-row-gap: 8px;
+        width: 100%;
 
         &--active {
             background: linear-gradient(270deg, #004dfe 0%, #477fff 100%);
@@ -219,6 +233,8 @@ export default {
     &__item-icons {
         display: none;
         align-items: center;
+        flex-wrap: wrap;
+        grid-row-gap: 4px;
         grid-column-gap: 4px;
     }
 
@@ -265,6 +281,11 @@ export default {
 
         &__item-icons {
             display: flex;
+        }
+
+        &__item-threat {
+            justify-content: flex-start;
+            grid-column-gap: 8px;
         }
 
         &__shadow {

@@ -70,14 +70,14 @@ export default {
 
 @media screen and (max-width: 1200px) {
     .home-modal {
-        overflow-y: auto;
-
         &__content {
             padding: 60px 16px 29px 16px;
             max-width: 100%;
             min-height: 100vh;
+            max-height: 100vh;
             border-radius: 0;
             border: none;
+            overflow-y: auto;
         }
 
         &__close {
@@ -85,6 +85,8 @@ export default {
             right: auto;
             left: 50%;
             transform: translate(-50%, -50%);
+            position: fixed;
+            z-index: 1000;
         }
     }
 }

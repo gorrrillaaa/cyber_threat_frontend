@@ -1,19 +1,23 @@
 <template>
     <div class="home-map-filters">
-        <button
-            class="home-map-filters__filter"
-            v-for="filter in filters"
-            :key="filter.id"
-            :class="filter.class"
-            @click="handleFilter(filter)"
-        >
-            {{ filter.label }}
-        </button>
+        <div class="home-map-filters__content" ref="content">
+            <button
+                class="home-map-filters__filter"
+                v-for="filter in filters"
+                :key="filter.id"
+                :class="filter.class"
+                @click="handleFilter(filter)"
+            >
+                {{ filter.label }}
+            </button>
+        </div>
+
+        <div class="home-map-filters__shadow" v-if="isShadow"></div>
     </div>
 </template>
 
 <script>
-import {computed} from "vue";
+import {computed, ref, onMounted, onBeforeUnmount} from "vue";
 import {useStore} from "vuex";
 
 const FILTERS_VALUES = {
@@ -25,8 +29,24 @@ export default {
     setup() {
         const store = useStore();
 
+        const content = ref(null);
+        const isShadow = ref(false);
+
+        onMounted(() => {
+            handleCheckScrollPosition();
+
+            content.value.addEventListener("scroll", handleCheckScrollPosition);
+        });
+
+        onBeforeUnmount(() => {
+            content.value.removeEventListener(
+                "scroll",
+                handleCheckScrollPosition
+            );
+        });
+
         const year = computed(() => {
-            return store.getters["getYear"];
+            return store.state.year;
         });
 
         const filters = computed(() => {
@@ -43,11 +63,24 @@ export default {
             ];
         });
 
+        const handleCheckScrollPosition = () => {
+            if (content.value) {
+                const scrollableHeight =
+                    content.value.scrollWidth - content.value.clientWidth;
+
+                isShadow.value =
+                    content.value.scrollLeft >= 0 &&
+                    content.value.scrollLeft < scrollableHeight;
+            }
+        };
+
         const handleFilter = (filter) => {
             store.commit("setYear", filter.value);
         };
 
         return {
+            content,
+            isShadow,
             year,
             filters,
             handleFilter,
@@ -62,18 +95,38 @@ export default {
     border: 1px solid $border-gray-150;
     background: $bg-black;
     padding: 38px 36px 37px 36px;
-    display: flex;
-    align-items: center;
-    grid-column-gap: 32px;
+    position: relative;
+
+    &__content {
+        @include scrollbar-x-hidden;
+        display: flex;
+        align-items: center;
+        grid-column-gap: 32px;
+    }
 
     &__filter {
         @include vietnam-semi-bold;
         color: $txt-main;
         font-size: 20px;
+        white-space: nowrap;
 
         &--active {
             color: $txt-primary;
         }
+    }
+
+    &__shadow {
+        border-radius: 15px;
+        background: linear-gradient(
+            0deg,
+            #26272f 24.6%,
+            rgba(38, 39, 47, 0) 237.3%
+        );
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 63px;
     }
 }
 

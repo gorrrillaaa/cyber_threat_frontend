@@ -40,9 +40,13 @@
                     Country of origin
                 </h5>
 
-                <!-- <div class="home-modal-info__content-icons">
-                    <UIIcon icon="flag-33" />
-                </div> -->
+                <div class="home-modal-info__content-icons">
+                    <UIIcon
+                        v-for="country in group.countries"
+                        :key="country.displayname"
+                        :icon="country.code"
+                    />
+                </div>
             </div>
 
             <div class="home-modal-info__content-info">
@@ -55,10 +59,10 @@
                         {{ country.displayname }}
                     </p>
 
-                    <!-- <UIIcon
+                    <UIIcon
                         class="home-modal-info__content-icon"
-                        icon="flag-33"
-                    /> -->
+                        :icon="country.code"
+                    />
                 </div>
             </div>
         </div>
@@ -67,9 +71,13 @@
             <div class="home-modal-info__content-header">
                 <h5 class="home-modal-info__content-title">Motivation</h5>
 
-                <!-- <div class="home-modal-info__content-icons">
-                    <UIIcon icon="money-25" />
-                </div> -->
+                <div class="home-modal-info__content-icons">
+                    <UIIcon
+                        v-for="motivation in group.motivations"
+                        :key="motivation.displayname"
+                        :icon="motivation.code"
+                    />
+                </div>
             </div>
 
             <div class="home-modal-info__content-info">
@@ -82,10 +90,10 @@
                         {{ motivation.displayname }}
                     </p>
 
-                    <!-- <UIIcon
+                    <UIIcon
                         class="home-modal-info__content-icon"
-                        icon="money-25"
-                    /> -->
+                        :icon="motivation.code"
+                    />
                 </div>
             </div>
         </div>
@@ -147,7 +155,7 @@ export default {
         });
 
         const group = computed(() => {
-            return store.getters["getGroup"];
+            return store.state.group;
         });
 
         const aliases = computed(() => {

@@ -3,7 +3,7 @@
         <h3 class="home-map-location__title">Groups location</h3>
 
         <HomeMapTooltip
-            v-if="isTooltip"
+            v-show="isTooltip"
             :label="tooltip.label"
             :x="tooltip.x"
             :y="tooltip.y"
@@ -1752,7 +1752,7 @@ export default {
         const isTooltip = ref(false);
 
         const group = computed(() => {
-            return store.getters["getGroup"];
+            return store.state.group;
         });
 
         const map = computed(() => {
