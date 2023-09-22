@@ -23,6 +23,7 @@ export default createStore({
         country: null,
         page: 0,
         map: [],
+        scrollPosition: 0,
     },
     getters: {
         getGroups(state) {
@@ -59,6 +60,10 @@ export default createStore({
 
         setMap(state, map) {
             state.map = map;
+        },
+
+        setScrollPosition(state) {
+            state.scrollPosition = window.pageYOffset;
         },
     },
 });

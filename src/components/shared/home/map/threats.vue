@@ -53,8 +53,7 @@ import {useStore} from "vuex";
 
 import UIIcon from "@/components/ui/icon/icon.vue";
 
-const DEFAULT_PERCENT = 100;
-const DEFAULT_GAP = 30;
+const DEFAULT_GAP = 100;
 
 export default {
     name: "HomeMapThreats",
@@ -117,7 +116,9 @@ export default {
 
             if (list.value) {
                 const scrollableHeight =
-                    list.value.scrollHeight - list.value.clientHeight;
+                    list.value.scrollHeight -
+                    list.value.clientHeight -
+                    DEFAULT_GAP;
 
                 isShadow.value =
                     list.value.scrollTop >= 0 &&

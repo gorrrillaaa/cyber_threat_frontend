@@ -6,10 +6,13 @@
 
 <script>
 import {onMounted, onBeforeUnmount} from "vue";
+import {useStore} from "vuex";
 
 export default {
     name: "UIModal",
     setup() {
+        const store = useStore();
+
         onMounted(() => {
             scrollLock(false);
         });
@@ -26,7 +29,11 @@ export default {
                 bodyElement.style.removeProperty("position");
                 bodyElement.style.removeProperty("top");
                 bodyElement.style.removeProperty("width");
+
+                window.scrollTo(0, store.state.scrollPosition);
             } else {
+                store.commit("setScrollPosition");
+
                 bodyElement.style.overflow = "hidden";
                 bodyElement.style.position = "fixed";
                 bodyElement.style.top = `-${window.pageYOffset}px`;
