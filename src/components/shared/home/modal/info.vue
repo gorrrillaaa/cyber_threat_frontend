@@ -49,7 +49,9 @@
                 </div>
             </div>
 
-            <div class="home-modal-info__content-info">
+            <div
+                class="home-modal-info__content-info home-modal-info__content-info--country"
+            >
                 <div
                     class="home-modal-info__content-group home-modal-info__content-group--country"
                     v-for="country in group.countries"
@@ -226,6 +228,12 @@ export default {
         grid-row-gap: 8px;
         width: 436px;
         position: relative;
+
+        &--country {
+            flex-direction: row;
+            flex-wrap: wrap;
+            grid-gap: 8px;
+        }
     }
 
     &__content-group {
@@ -318,7 +326,9 @@ export default {
         }
 
         &__content-icons {
-            display: block;
+            display: flex;
+            flex-wrap: wrap;
+            grid-gap: 8px;
         }
 
         &__content-icon {

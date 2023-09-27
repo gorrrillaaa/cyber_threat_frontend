@@ -56,6 +56,7 @@ export default {
         position: absolute;
         top: 0;
         right: -81px;
+        z-index: 1000;
     }
 }
 
@@ -81,12 +82,8 @@ export default {
         }
 
         &__close {
-            top: 50%;
-            right: auto;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            position: fixed;
-            z-index: 1000;
+            top: 5px;
+            right: 15px;
         }
     }
 }
