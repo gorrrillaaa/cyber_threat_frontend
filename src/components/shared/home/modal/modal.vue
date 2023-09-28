@@ -72,18 +72,23 @@ export default {
 @media screen and (max-width: 1200px) {
     .home-modal {
         &__content {
-            padding: 60px 16px 29px 16px;
+            padding: 20px 16px 29px 16px;
             max-width: 100%;
             min-height: 100vh;
             max-height: 100vh;
             border-radius: 0;
             border: none;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         &__close {
-            top: 5px;
-            right: 15px;
+            position: relative;
+            top: 0;
+            right: 0;
+            margin-left: auto;
+            margin-bottom: 10px;
         }
     }
 }
