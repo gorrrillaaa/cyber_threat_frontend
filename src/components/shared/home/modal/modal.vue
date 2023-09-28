@@ -72,7 +72,7 @@ export default {
 @media screen and (max-width: 1200px) {
     .home-modal {
         &__content {
-            padding: 20px 16px 29px 16px;
+            padding: 60px 16px 29px 16px;
             max-width: 100%;
             min-height: 100vh;
             max-height: 100vh;
