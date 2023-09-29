@@ -11,7 +11,6 @@
 
         <svg
             class="home-map-location__world"
-            height="305"
             viewBox="0 0 980 305"
             preserveAspectRatio="xMidYMid"
             xmlns="http://www.w3.org/2000/svg"
@@ -1813,11 +1812,11 @@ export default {
 
     &__title {
         font-size: 26px;
-        margin-bottom: 81px;
     }
 
     &__world {
         width: 100%;
+        height: 650px;
     }
 
     &__country {
@@ -1842,6 +1841,10 @@ export default {
         &__title {
             font-size: 20px;
             margin-bottom: 44px;
+        }
+
+        &__world {
+            height: 305px;
         }
     }
 }

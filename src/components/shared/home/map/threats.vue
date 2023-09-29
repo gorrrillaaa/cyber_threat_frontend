@@ -187,7 +187,7 @@ export default {
         display: flex;
         flex-direction: column;
         grid-row-gap: 18px;
-        max-height: 350px;
+        max-height: 650px;
         overflow-y: auto;
 
         &--scroll {
@@ -266,6 +266,10 @@ export default {
 
         &__title {
             font-size: 20px;
+        }
+
+        &__list {
+            max-height: 350px;
         }
     }
 }
