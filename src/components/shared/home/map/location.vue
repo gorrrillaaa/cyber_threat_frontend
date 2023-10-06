@@ -1653,7 +1653,7 @@
 </template>
 
 <script>
-import {computed, reactive, ref} from "vue";
+import {computed, reactive, ref, watchEffect} from "vue";
 import {useStore} from "vuex";
 
 import HomeMapTooltip from "@/components/shared/home/map/tooltip.vue";
@@ -1935,6 +1935,36 @@ export default {
             return store.state.map;
         });
 
+        watchEffect(() => {
+            if (map.value.length) {
+                map.value.forEach((item) => {
+                    const element = document.getElementById(item)
+
+                    if (element) {
+                        const {left, top} = document.getElementById(item).getBoundingClientRect()
+
+                        tooltip.label = COUNTRIES[item]
+                        tooltip.x = left;
+                        tooltip.y = top;
+
+                        isTooltip.value = true;
+                    } else {
+                        tooltip.label = ''
+                        tooltip.x = 0
+                        tooltip.y = 0
+
+                        isTooltip.value = false;
+                    }
+                })
+            } else {
+                tooltip.label = ''
+                tooltip.x = 0
+                tooltip.y = 0
+
+                isTooltip.value = false;
+            }
+        })
+
         const handleSetCountry = ({clientX, clientY}, country) => {
             store.commit("setCountry", country);
 
@@ -1959,16 +1989,6 @@ export default {
             if (map.value.length) {
                 const hasCountry = map.value.find((findCountry) => findCountry === country)
 
-                if (hasCountry) {
-                    const {left, top} = document.getElementById(hasCountry).getBoundingClientRect()
-
-                    tooltip.label = COUNTRIES[hasCountry]
-                    tooltip.x = left;
-                    tooltip.y = top;
-
-                    isTooltip.value = true;
-                }
-
                 return hasCountry
                     ? "home-map-location__country--active"
                     : "";
@@ -1981,12 +2001,6 @@ export default {
                     ? "home-map-location__country--active"
                     : "";
             }
-
-            tooltip.label = ''
-            tooltip.x = 0
-            tooltip.y = 0
-
-            isTooltip.value = false;
 
             return "";
         };
