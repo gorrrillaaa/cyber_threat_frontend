@@ -1937,17 +1937,21 @@ export default {
 
         watchEffect(() => {
             if (map.value.length) {
+                const hasTooltip = map.value.length > 1
+
                 map.value.forEach((item) => {
                     const element = document.getElementById(item)
 
                     if (element) {
-                        const {left, top} = document.getElementById(item).getBoundingClientRect()
+                        if (!hasTooltip) {
+                            const {left, top} = document.getElementById(item).getBoundingClientRect()
 
-                        tooltip.label = COUNTRIES[item]
-                        tooltip.x = left;
-                        tooltip.y = top;
+                            tooltip.label = COUNTRIES[item]
+                            tooltip.x = left;
+                            tooltip.y = top;
 
-                        isTooltip.value = true;
+                            isTooltip.value = true;
+                        }
                     } else {
                         tooltip.label = ''
                         tooltip.x = 0
